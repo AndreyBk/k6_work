@@ -1,0 +1,1756 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 11,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "d149e1dd-cae0-44a8-9320-c532f26d6036"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "series",
+            "axisGridShow": true,
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "axisSoftMin": 0,
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 2,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 1,
+            "pointSize": 6,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "always",
+            "spanNulls": 60000,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "ms"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "VU"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              },
+              {
+                "id": "unit",
+                "value": "vu"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "TPS"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              },
+              {
+                "id": "unit",
+                "value": "TPS"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 20,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 10,
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true,
+          "width": 400
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "alias": "metric without cache (first event)",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "d149e1dd-cae0-44a8-9320-c532f26d6036"
+          },
+          "groupBy": [
+            {
+              "params": [
+                "1s"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "group::tag"
+              ],
+              "type": "tag"
+            }
+          ],
+          "hide": false,
+          "measurement": "k6_group_duration",
+          "orderByTime": "ASC",
+          "policy": "autogen",
+          "query": "SELECT mean(\"startedT\")  / 100, mean(\"endedT\"), mean(\"maxAT\"), mean(\"meanAT\"), mean(\"minAT\") FROM \"undefined\".\"jmeter\" WHERE (\"transaction\"::tag = 'internal') AND $timeFilter GROUP BY time(10s), \"endedT\"::field, \"startedT\"::field, \"maxAT\"::field, \"minAT\"::field, \"meanAT\"::field fill(null)",
+          "rawQuery": false,
+          "refId": "E",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "90_percentile"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "max"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "group::tag",
+              "operator": "=",
+              "value": "::kafka_no_cash_event_first"
+            }
+          ]
+        },
+        {
+          "alias": "metric with cache",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "d149e1dd-cae0-44a8-9320-c532f26d6036"
+          },
+          "groupBy": [
+            {
+              "params": [
+                "1s"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "group::tag"
+              ],
+              "type": "tag"
+            }
+          ],
+          "hide": false,
+          "measurement": "k6_group_duration",
+          "orderByTime": "ASC",
+          "policy": "autogen",
+          "query": "SELECT mean(\"startedT\")  / 100, mean(\"endedT\"), mean(\"maxAT\"), mean(\"meanAT\"), mean(\"minAT\") FROM \"undefined\".\"jmeter\" WHERE (\"transaction\"::tag = 'internal') AND $timeFilter GROUP BY time(10s), \"endedT\"::field, \"startedT\"::field, \"maxAT\"::field, \"minAT\"::field, \"meanAT\"::field fill(null)",
+          "rawQuery": false,
+          "refId": "B",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "90_percentile"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "max"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "group::tag",
+              "operator": "=",
+              "value": "::kafka_with_cash_event"
+            }
+          ]
+        },
+        {
+          "alias": "TPS",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "d149e1dd-cae0-44a8-9320-c532f26d6036"
+          },
+          "groupBy": [
+            {
+              "params": [
+                "10s"
+              ],
+              "type": "time"
+            }
+          ],
+          "hide": false,
+          "measurement": "k6_group_duration",
+          "orderByTime": "ASC",
+          "policy": "autogen",
+          "query": "SELECT sum(\"count\") FROM \"autogen\".\"k6_group_duration\" WHERE (\"group\"::tag = '::kafka_no_cash_event') AND $timeFilter GROUP BY time(1s)",
+          "rawQuery": false,
+          "refId": "C",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "count"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "sum"
+              },
+              {
+                "params": [
+                  " / 10"
+                ],
+                "type": "math"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "group::tag",
+              "operator": "=",
+              "value": "::kafka_main_load"
+            },
+            {
+              "condition": "OR",
+              "key": "group::tag",
+              "operator": "=",
+              "value": "::kafka_no_cash_event_first"
+            },
+            {
+              "condition": "OR",
+              "key": "group::tag",
+              "operator": "=",
+              "value": "::fast_produce_kafka"
+            }
+          ]
+        }
+      ],
+      "title": "Transaction Response Time - Summary Transactions / second",
+      "transformations": [],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "d149e1dd-cae0-44a8-9320-c532f26d6036"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "series",
+            "axisGridShow": true,
+            "axisLabel": "",
+            "axisPlacement": "hidden",
+            "axisSoftMin": 0,
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 2,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 2,
+            "pointSize": 6,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "always",
+            "spanNulls": 60000,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "ms"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Transaction amount (TPS)"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              },
+              {
+                "id": "unit",
+                "value": "TPS"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Main load with cache transactions"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "left"
+              },
+              {
+                "id": "unit",
+                "value": " main tps"
+              },
+              {
+                "id": "custom.scaleDistribution",
+                "value": {
+                  "type": "linear"
+                }
+              },
+              {
+                "id": "custom.axisSoftMax",
+                "value": 28
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Transactions metrics with cache"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "left"
+              },
+              {
+                "id": "unit",
+                "value": "metrics tps"
+              },
+              {
+                "id": "custom.axisSoftMax",
+                "value": 1.6
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Transactions metrics without cache (first event)"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "left"
+              },
+              {
+                "id": "unit",
+                "value": "metrics tps"
+              },
+              {
+                "id": "custom.axisSoftMax",
+                "value": 1.6
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 20,
+        "w": 24,
+        "x": 0,
+        "y": 20
+      },
+      "id": 11,
+      "options": {
+        "legend": {
+          "calcs": [
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true,
+          "width": 400
+        },
+        "timezone": [
+          ""
+        ],
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "alias": "Main load with cache transactions",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "d149e1dd-cae0-44a8-9320-c532f26d6036"
+          },
+          "groupBy": [
+            {
+              "params": [
+                "10s"
+              ],
+              "type": "time"
+            }
+          ],
+          "hide": false,
+          "measurement": "k6_group_duration",
+          "orderByTime": "ASC",
+          "policy": "autogen",
+          "query": "SELECT sum(\"count\") FROM \"autogen\".\"k6_group_duration\" WHERE (\"group\"::tag = '::kafka_no_cash_event') AND $timeFilter GROUP BY time(1s)",
+          "rawQuery": false,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "count"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "sum"
+              },
+              {
+                "params": [
+                  " / 10"
+                ],
+                "type": "math"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "group::tag",
+              "operator": "=",
+              "value": "::kafka_main_load"
+            }
+          ]
+        },
+        {
+          "alias": "Transactions metrics with cache",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "d149e1dd-cae0-44a8-9320-c532f26d6036"
+          },
+          "groupBy": [
+            {
+              "params": [
+                "1m"
+              ],
+              "type": "time"
+            }
+          ],
+          "hide": false,
+          "measurement": "k6_group_duration",
+          "orderByTime": "ASC",
+          "policy": "autogen",
+          "query": "SELECT sum(\"count\") FROM \"autogen\".\"k6_group_duration\" WHERE (\"group\"::tag = '::kafka_no_cash_event') AND $timeFilter GROUP BY time(1s)",
+          "rawQuery": false,
+          "refId": "B",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "count"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "sum"
+              },
+              {
+                "params": [
+                  " / 60"
+                ],
+                "type": "math"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "condition": "OR",
+              "key": "group::tag",
+              "operator": "=",
+              "value": "::kafka_with_cash_event"
+            }
+          ]
+        },
+        {
+          "alias": "Transactions metrics without cache (first event)",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "d149e1dd-cae0-44a8-9320-c532f26d6036"
+          },
+          "groupBy": [
+            {
+              "params": [
+                "1m"
+              ],
+              "type": "time"
+            }
+          ],
+          "hide": false,
+          "measurement": "k6_group_duration",
+          "orderByTime": "ASC",
+          "policy": "autogen",
+          "query": "SELECT sum(\"count\") FROM \"autogen\".\"k6_group_duration\" WHERE (\"group\"::tag = '::kafka_no_cash_event') AND $timeFilter GROUP BY time(1s)",
+          "rawQuery": false,
+          "refId": "D",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "count"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "sum"
+              },
+              {
+                "params": [
+                  " / 60"
+                ],
+                "type": "math"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "group::tag",
+              "operator": "=",
+              "value": "::kafka_no_cash_event_first"
+            }
+          ]
+        },
+        {
+          "alias": "Transaction amount (TPS)",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "d149e1dd-cae0-44a8-9320-c532f26d6036"
+          },
+          "groupBy": [
+            {
+              "params": [
+                "10s"
+              ],
+              "type": "time"
+            }
+          ],
+          "hide": false,
+          "measurement": "k6_group_duration",
+          "orderByTime": "ASC",
+          "policy": "autogen",
+          "query": "SELECT sum(\"count\") FROM \"autogen\".\"k6_group_duration\" WHERE (\"group\"::tag = '::kafka_no_cash_event') AND $timeFilter GROUP BY time(1s)",
+          "rawQuery": false,
+          "refId": "C",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "count"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "sum"
+              },
+              {
+                "params": [
+                  " / 10"
+                ],
+                "type": "math"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "group::tag",
+              "operator": "=",
+              "value": "::kafka_main_load"
+            },
+            {
+              "condition": "OR",
+              "key": "group::tag",
+              "operator": "=",
+              "value": "::kafka_no_cash_event_first"
+            },
+            {
+              "condition": "OR",
+              "key": "group::tag",
+              "operator": "=",
+              "value": "::fast_produce_kafka"
+            }
+          ]
+        }
+      ],
+      "title": "Transactions by scenarios",
+      "transformations": [],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "d149e1dd-cae0-44a8-9320-c532f26d6036"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "series",
+            "axisGridShow": true,
+            "axisLabel": "",
+            "axisPlacement": "left",
+            "axisSoftMin": 0,
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 2,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 2,
+            "pointSize": 6,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "always",
+            "spanNulls": 60000,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "ms"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "TPS"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              },
+              {
+                "id": "unit",
+                "value": "TPS"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 20,
+        "w": 24,
+        "x": 0,
+        "y": 40
+      },
+      "id": 9,
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "count"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true,
+          "width": 400
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "alias": "Error",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "d149e1dd-cae0-44a8-9320-c532f26d6036"
+          },
+          "groupBy": [
+            {
+              "params": [
+                "1s"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "group::tag"
+              ],
+              "type": "tag"
+            }
+          ],
+          "hide": false,
+          "measurement": "k6_group_duration",
+          "orderByTime": "ASC",
+          "policy": "autogen",
+          "query": "SELECT mean(\"startedT\")  / 100, mean(\"endedT\"), mean(\"maxAT\"), mean(\"meanAT\"), mean(\"minAT\") FROM \"undefined\".\"jmeter\" WHERE (\"transaction\"::tag = 'internal') AND $timeFilter GROUP BY time(10s), \"endedT\"::field, \"startedT\"::field, \"maxAT\"::field, \"minAT\"::field, \"meanAT\"::field fill(null)",
+          "rawQuery": false,
+          "refId": "E",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "90_percentile"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "max"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "group::tag",
+              "operator": "!=",
+              "value": "::pacing_group"
+            },
+            {
+              "condition": "AND",
+              "key": "status::tag",
+              "operator": "=",
+              "value": "ko"
+            }
+          ]
+        },
+        {
+          "alias": "TPS",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "d149e1dd-cae0-44a8-9320-c532f26d6036"
+          },
+          "groupBy": [
+            {
+              "params": [
+                "10s"
+              ],
+              "type": "time"
+            }
+          ],
+          "hide": false,
+          "measurement": "k6_group_duration",
+          "orderByTime": "ASC",
+          "policy": "autogen",
+          "query": "SELECT sum(\"count\")  / 10 FROM \"autogen\".\"k6_group_duration\" WHERE (\"group\"::tag = '::kafka_main_load' OR \"group\"::tag = '::kafka_no_cash_event_first' OR \"group\"::tag = '::fast_produce_kafka') AND $timeFilter GROUP BY time(10s)",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "count"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "sum"
+              },
+              {
+                "params": [
+                  " / 10"
+                ],
+                "type": "math"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "group::tag",
+              "operator": "=",
+              "value": "::kafka_main_load"
+            }
+          ]
+        }
+      ],
+      "title": "Errors",
+      "transformations": [],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "d149e1dd-cae0-44a8-9320-c532f26d6036"
+      },
+      "description": "buffer_limit - предельный размер буфера\nbuffer_size - размер занятого буфера\nmetrics_dropped - должны быть по-нулям",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "series",
+            "axisGridShow": true,
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "axisSoftMin": 0,
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "__systemRef": "hideSeriesFrom",
+            "matcher": {
+              "id": "byNames",
+              "options": {
+                "mode": "exclude",
+                "names": [
+                  "buffer_size",
+                  "metrics_dropped"
+                ],
+                "prefix": "All except:",
+                "readOnly": true
+              }
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": true
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 13,
+        "w": 24,
+        "x": 0,
+        "y": 60
+      },
+      "id": 5,
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "count"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true,
+          "width": 350
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "alias": "buffer_limit",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "d149e1dd-cae0-44a8-9320-c532f26d6036"
+          },
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "hide": false,
+          "measurement": "internal_write",
+          "orderByTime": "ASC",
+          "policy": "autogen",
+          "query": "SELECT mean(*) FROM \"autogen\".\"internal_write\" WHERE $timeFilter GROUP BY time($__interval) fill(null)",
+          "rawQuery": false,
+          "refId": "E",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "buffer_limit"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": []
+        },
+        {
+          "alias": "buffer_size",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "d149e1dd-cae0-44a8-9320-c532f26d6036"
+          },
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "hide": false,
+          "measurement": "internal_write",
+          "orderByTime": "ASC",
+          "policy": "autogen",
+          "query": "SELECT mean(*) FROM \"autogen\".\"internal_write\" WHERE $timeFilter GROUP BY time($__interval) fill(null)",
+          "rawQuery": false,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "buffer_size"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": []
+        },
+        {
+          "alias": "metrics_dropped",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "d149e1dd-cae0-44a8-9320-c532f26d6036"
+          },
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "hide": false,
+          "measurement": "internal_write",
+          "orderByTime": "ASC",
+          "policy": "autogen",
+          "query": "SELECT mean(*) FROM \"autogen\".\"internal_write\" WHERE $timeFilter GROUP BY time($__interval) fill(null)",
+          "rawQuery": false,
+          "refId": "B",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "metrics_dropped"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "mean"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "title": "Internal  telegraf metrics",
+      "transformations": [],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "d149e1dd-cae0-44a8-9320-c532f26d6036"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "series",
+            "axisGridShow": true,
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "axisSoftMin": 0,
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 2,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 1,
+            "pointSize": 6,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "always",
+            "spanNulls": 60000,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "ms"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "VU"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              },
+              {
+                "id": "unit",
+                "value": "vu"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "TPS"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              },
+              {
+                "id": "unit",
+                "value": "tps"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 13,
+        "w": 24,
+        "x": 0,
+        "y": 73
+      },
+      "id": 1,
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "width": 400
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "alias": "$tag_group",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "d149e1dd-cae0-44a8-9320-c532f26d6036"
+          },
+          "groupBy": [
+            {
+              "params": [
+                "1s"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "group::tag"
+              ],
+              "type": "tag"
+            }
+          ],
+          "hide": false,
+          "measurement": "k6_group_duration",
+          "orderByTime": "ASC",
+          "policy": "autogen",
+          "query": "SELECT mean(\"startedT\")  / 100, mean(\"endedT\"), mean(\"maxAT\"), mean(\"meanAT\"), mean(\"minAT\") FROM \"undefined\".\"jmeter\" WHERE (\"transaction\"::tag = 'internal') AND $timeFilter GROUP BY time(10s), \"endedT\"::field, \"startedT\"::field, \"maxAT\"::field, \"minAT\"::field, \"meanAT\"::field fill(null)",
+          "rawQuery": false,
+          "refId": "E",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "90_percentile"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "max"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "group::tag",
+              "operator": "!=",
+              "value": "::pacing_group"
+            }
+          ]
+        },
+        {
+          "alias": "VU",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "d149e1dd-cae0-44a8-9320-c532f26d6036"
+          },
+          "groupBy": [
+            {
+              "params": [
+                "1s"
+              ],
+              "type": "time"
+            }
+          ],
+          "hide": true,
+          "measurement": "k6_vus",
+          "orderByTime": "ASC",
+          "policy": "autogen",
+          "query": "SELECT mean(\"startedT\")  / 100, mean(\"endedT\"), mean(\"maxAT\"), mean(\"meanAT\"), mean(\"minAT\") FROM \"undefined\".\"jmeter\" WHERE (\"transaction\"::tag = 'internal') AND $timeFilter GROUP BY time(10s), \"endedT\"::field, \"startedT\"::field, \"maxAT\"::field, \"minAT\"::field, \"meanAT\"::field fill(null)",
+          "rawQuery": false,
+          "refId": "N",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "max"
+              }
+            ]
+          ],
+          "tags": []
+        },
+        {
+          "alias": "tps",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "d149e1dd-cae0-44a8-9320-c532f26d6036"
+          },
+          "groupBy": [
+            {
+              "params": [
+                "10s"
+              ],
+              "type": "time"
+            }
+          ],
+          "hide": false,
+          "measurement": "k6_iterations",
+          "orderByTime": "ASC",
+          "policy": "autogen",
+          "query": "SELECT mean(\"startedT\")  / 100, mean(\"endedT\"), mean(\"maxAT\"), mean(\"meanAT\"), mean(\"minAT\") FROM \"undefined\".\"jmeter\" WHERE (\"transaction\"::tag = 'internal') AND $timeFilter GROUP BY time(10s), \"endedT\"::field, \"startedT\"::field, \"maxAT\"::field, \"minAT\"::field, \"meanAT\"::field fill(null)",
+          "rawQuery": false,
+          "refId": "M",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "sum"
+              },
+              {
+                "params": [
+                  "/ 10"
+                ],
+                "type": "math"
+              }
+            ]
+          ],
+          "tags": []
+        },
+        {
+          "alias": "TPS",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "d149e1dd-cae0-44a8-9320-c532f26d6036"
+          },
+          "groupBy": [
+            {
+              "params": [
+                "10s"
+              ],
+              "type": "time"
+            }
+          ],
+          "hide": false,
+          "measurement": "k6_group_duration",
+          "orderByTime": "ASC",
+          "policy": "autogen",
+          "query": "SELECT sum(\"count\") FROM \"autogen\".\"k6_group_duration\" WHERE (\"group\"::tag = '::kafka_no_cash_event') AND $timeFilter GROUP BY time(1s)",
+          "rawQuery": false,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "count"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "sum"
+              },
+              {
+                "params": [
+                  " / 10"
+                ],
+                "type": "math"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "group::tag",
+              "operator": "=",
+              "value": "::kafka_main_load"
+            },
+            {
+              "condition": "OR",
+              "key": "group::tag",
+              "operator": "=",
+              "value": "::kafka_no_cash_event_first"
+            },
+            {
+              "condition": "OR",
+              "key": "group::tag",
+              "operator": "=",
+              "value": "::fast_produce_kafka"
+            }
+          ]
+        }
+      ],
+      "title": "Transaction Response Time - Summary Transactions / second",
+      "transformations": [],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "d149e1dd-cae0-44a8-9320-c532f26d6036"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "series",
+            "axisGridShow": true,
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "axisSoftMin": 0,
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "ms"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "VU"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              },
+              {
+                "id": "unit",
+                "value": "vu"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "tps"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              },
+              {
+                "id": "unit",
+                "value": "tps"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 13,
+        "w": 24,
+        "x": 0,
+        "y": 86
+      },
+      "id": 4,
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "count"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "width": 350
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "alias": "vu",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "d149e1dd-cae0-44a8-9320-c532f26d6036"
+          },
+          "groupBy": [
+            {
+              "params": [
+                "1s"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "name::tag"
+              ],
+              "type": "tag"
+            }
+          ],
+          "hide": false,
+          "measurement": "k6_vus",
+          "orderByTime": "ASC",
+          "policy": "autogen",
+          "query": "SELECT mean(\"startedT\")  / 100, mean(\"endedT\"), mean(\"maxAT\"), mean(\"meanAT\"), mean(\"minAT\") FROM \"undefined\".\"jmeter\" WHERE (\"transaction\"::tag = 'internal') AND $timeFilter GROUP BY time(10s), \"endedT\"::field, \"startedT\"::field, \"maxAT\"::field, \"minAT\"::field, \"meanAT\"::field fill(null)",
+          "rawQuery": false,
+          "refId": "E",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "sum"
+              }
+            ]
+          ],
+          "tags": []
+        },
+        {
+          "alias": "tps",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "d149e1dd-cae0-44a8-9320-c532f26d6036"
+          },
+          "groupBy": [
+            {
+              "params": [
+                "10s"
+              ],
+              "type": "time"
+            }
+          ],
+          "hide": true,
+          "measurement": "iterations",
+          "orderByTime": "ASC",
+          "policy": "autogen",
+          "query": "SELECT mean(\"startedT\")  / 100, mean(\"endedT\"), mean(\"maxAT\"), mean(\"meanAT\"), mean(\"minAT\") FROM \"undefined\".\"jmeter\" WHERE (\"transaction\"::tag = 'internal') AND $timeFilter GROUP BY time(10s), \"endedT\"::field, \"startedT\"::field, \"maxAT\"::field, \"minAT\"::field, \"meanAT\"::field fill(null)",
+          "rawQuery": false,
+          "refId": "M",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "sum"
+              },
+              {
+                "params": [
+                  " / 10"
+                ],
+                "type": "math"
+              }
+            ]
+          ],
+          "tags": []
+        },
+        {
+          "alias": "VU",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "d149e1dd-cae0-44a8-9320-c532f26d6036"
+          },
+          "groupBy": [
+            {
+              "params": [
+                "10s"
+              ],
+              "type": "time"
+            }
+          ],
+          "hide": false,
+          "measurement": "vus",
+          "orderByTime": "ASC",
+          "policy": "autogen",
+          "query": "SELECT mean(\"startedT\")  / 100, mean(\"endedT\"), mean(\"maxAT\"), mean(\"meanAT\"), mean(\"minAT\") FROM \"undefined\".\"jmeter\" WHERE (\"transaction\"::tag = 'internal') AND $timeFilter GROUP BY time(10s), \"endedT\"::field, \"startedT\"::field, \"maxAT\"::field, \"minAT\"::field, \"meanAT\"::field fill(null)",
+          "rawQuery": false,
+          "refId": "N",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "sum"
+              },
+              {
+                "params": [
+                  " / 10"
+                ],
+                "type": "math"
+              }
+            ]
+          ],
+          "tags": []
+        }
+      ],
+      "title": "All request responses time - Running Vusers",
+      "transformations": [],
+      "type": "timeseries"
+    }
+  ],
+  "refresh": "",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-5m",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "k6_DPU_zif_events",
+  "uid": "a5c9c3fb-2aad-472f-a7f6-2fbe0d836b40",
+  "version": 60,
+  "weekStart": ""
+}
