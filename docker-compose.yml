@@ -1,0 +1,17 @@
+version: '3'
+services:
+  worker:
+    image: my_k6_11
+    build: .
+    environment:
+      K6_STATSD_ADDR: "192.168.0.116:8186"
+      K6_WEB_DASHBOARD: "true"
+      K6_WEB_DASHBOARD_EXPORT: "html-report.html"
+      BASE_URL: "https://test-1.dev.com"
+      CLIENT_ID: "xxxx"
+      CLIENT_SECRET: "xxxx"
+      USERNAME: "xxxx"
+      PASSWORD: "xxxx"
+    # network_mode: "host"
+    deploy:
+      replicas: 3
