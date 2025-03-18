@@ -40,5 +40,13 @@ CLIENT_ID, CLIENT_SECRET, USERNAME, PASSWORD - креды
 BASE_URL - адрес тестируемого полигона  
 
 ## Запуск в Docker
-todo
+При сборке образа обратить внимание на версию go и версию используемых компонентов, при несовпадении, возникнут ошибки на этапе сборки образа.
+Файлы скриптов *.js, файл точки входа docker-entrypoint.sh, конфиг телеграфа telegraf.conf собираю вместе с образом.
+
+Затруднения:
+Не получилось [управлять](https://grafana.com/docs/k6/latest/misc/k6-rest-api/#:~:text=life%20cycle.-,Stop%20Test,-PATCH%20http%3A//localhost) тестовым запуском извне.
+Что дальше:
+посмотреть в сторону playwright (нужен скриншотер и некий мастер как в locust)
+
+
 
